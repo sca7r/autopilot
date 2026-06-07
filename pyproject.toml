@@ -1,0 +1,99 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "autopilot"
+version = "0.2.0"
+description = "Iterative Model Predictive Control for vehicle path-following, built with CVXPY and MuJoCo."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "Harsh Patil" }]
+maintainers = [{ name = "Harsh Patil" }]
+keywords = [
+    "model-predictive-control",
+    "mpc",
+    "cvxpy",
+    "mujoco",
+    "trajectory-tracking",
+    "robotics",
+    "autonomous-vehicles",
+    "control",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "numpy<2",
+    "cvxpy",
+    "scipy",
+    "osqp",
+    "pyyaml",
+]
+
+[project.optional-dependencies]
+# Everything the bundled examples/demos need.
+demos = [
+    "matplotlib",
+    "mujoco",
+]
+dev = [
+    "matplotlib",
+    "mujoco",
+    "black>=24",
+    "ruff>=0.4",
+    "pytest>=8",
+    "pytest-cov",
+]
+
+[project.urls]
+Homepage = "https://github.com/harshpatil/autopilot"
+Repository = "https://github.com/harshpatil/autopilot"
+Issues = "https://github.com/harshpatil/autopilot/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"autopilot" = [
+    "config/*.yaml",
+    "models/**/*.xml",
+    "models/**/*.stl",
+    "models/**/*.template",
+    "models/**/*.py",
+]
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+extend-exclude = [
+    "build",
+    "dist",
+    # vendored MuJoCo model-generation helper from prl-mushr; kept as-is
+    "src/autopilot/models",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B"]
+ignore = [
+    "E501",  # line length handled by black
+]
+
+[tool.ruff.lint.per-file-ignores]
+"examples/*.py" = ["E402"]  # imports after __future__ in runnable scripts
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = "-ra -q"
